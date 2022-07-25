@@ -1,0 +1,19 @@
+{
+  "name": "odin-test-practice",
+  "version": "1.0.0",
+  "description": "TOP testing practice",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/borangoher/odin-test-practice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/borangoher/odin-test-practice/issues"
+  },
+  "homepage": "https://github.com/borangoher/odin-test-practice#readme"
+}
