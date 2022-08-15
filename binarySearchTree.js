@@ -82,6 +82,67 @@ class Tree {
     }
   };
 
+  preorderTraverse = (root) => {
+    if (root !== null) {
+      console.log(root.value);
+      this.preorderTraverse(root.leftChild);
+      this.preorderTraverse(root.rightChild);
+    }
+  };
+
+  postorderTraverse = (root) => {
+    if (root !== null) {
+      this.postorderTraverse(root.leftChild);
+      this.postorderTraverse(root.rightChild);
+      console.log(root.value);
+    }
+  };
+
+  _isBalanced = (root) => {
+    let leftHeight, rightHeight;
+    if (root !== null) {
+      this.isBalanced(root.leftChild);
+      if (root.leftChild !== null) {
+        leftHeight = root.leftChild.height();
+      } else {
+        leftHeight = 0;
+      }
+
+      if (root.rightChild !== null) {
+        rightHeight = root.rightChild.height();
+      } else {
+        rightHeight = 0;
+      }
+      if (Math.abs(rightHeight - leftHeight) > 1) {
+        return false;
+      }
+      this.isBalanced(root.rightChild);
+    }
+  };
+
+  isBalanced = (root) => {
+    let a = this._isBalanced(root);
+    if (a === undefined) {
+      return true;
+    } else {
+      return a;
+    }
+  };
+
+  getInorderArray = (root, q) => {
+    if (root !== null) {
+      this.getInorderArray(root.leftChild, q);
+      q.push(root.value);
+      this.getInorderArray(root.rightChild, q);
+    }
+  };
+
+  rebalanceTree = (root) => {
+    let q = [];
+    this.getInorderArray(root, q);
+    this.headNode = this.buildTree(q);
+  };
+
   _getInOrderNext = (node) => {
     let current = node;
     if (node.leftChild !== null) {
@@ -176,6 +237,6 @@ class Tree {
 
 exampleArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let a = new Tree(exampleArray);
-a.inorderTraverse(a.headNode);
 a.delete(a.headNode, 23);
-a.inorderTraverse(a.headNode);
+console.log(a.isBalanced(a.headNode));
+a.rebalanceTree(a.headNode);
