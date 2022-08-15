@@ -106,36 +106,68 @@ class Tree {
     return root;
   };
 
-  delete = (root, value) => {
-    if (root === null) {
-      return root;
-    }
+  _deleteDeepest(root, delNode) {
+    let q = [];
+    q.push(root);
 
-    if (root.value < value) {
-      root.rightChild = this.delete(root.rightChild, value);
-    } else if (root.value > value) {
-      root.leftChild = this.delete(root.leftChild, value);
-    } else {
-      if (root.leftChild === null && root.rightChild === null) {
-        root = null;
-        return null;
-      } else if (root.leftChild === null) {
-        let temp = root.rightChild;
-        root = null;
-        return temp;
-      } else if (root.rightChild === null) {
-        let temp = root.leftChild;
-        root = null;
-        return temp;
-      } else {
-        temp = this._getInOrderNext(root.rightChild);
-        root.value = temp.value;
-        this.delete(root.rightChild, temp.key);
+    let temp = null;
+
+    while (q.length > 0) {
+      temp = q[0];
+      q.shift();
+
+      if (temp == delNode) {
+        temp = null;
+        return;
+      }
+      if (temp.right != null) {
+        if (temp.right == delNode) {
+          temp.right = null;
+          return;
+        } else q.push(temp.right);
       }
 
-      return root;
+      if (temp.left != null) {
+        if (temp.left == delNode) {
+          temp.left = null;
+          return;
+        } else q.push(temp.left);
+      }
     }
-  };
+  }
+
+  delete(root, key) {
+    if (root == null) return;
+
+    if (root.left == null && root.right == null) {
+      if (root.key == key) {
+        root = null;
+        return;
+      } else return;
+    }
+
+    let q = [];
+    q.push(root);
+    let temp = null,
+      keyNode = null;
+
+    while (q.length > 0) {
+      temp = q[0];
+      q.shift();
+
+      if (temp.key == key) keyNode = temp;
+
+      if (temp.left != null) q.push(temp.left);
+
+      if (temp.right != null) q.push(temp.right);
+    }
+
+    if (keyNode != null) {
+      let x = temp.key;
+      this._deleteDeepest(root, temp);
+      keyNode.key = x;
+    }
+  }
 
   constructor(array) {
     this.headNode = this.buildTree(this._normalizeArray(array));
@@ -145,5 +177,5 @@ class Tree {
 exampleArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let a = new Tree(exampleArray);
 a.inorderTraverse(a.headNode);
-a.headNode = a.delete(a.headNode, 23);
+a.delete(a.headNode, 23);
 a.inorderTraverse(a.headNode);
